@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import LoginScreen from './app/screens/LoginScreen';
+import AuthenticateScreen from './app/screens/AuthenticateScreen';
 
 export default function App() {
   return (
-    <LoginScreen />
+    <AuthenticateScreen />
   );
 }
 
