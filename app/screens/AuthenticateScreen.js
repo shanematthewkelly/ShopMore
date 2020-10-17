@@ -7,11 +7,11 @@ function LoginScreen(props) {
     return (
         <ImageBackground
             style={styles.imageBackground}
-            source={require("../assets/login.jpg")}>
+            source={require("../assets/images/login.jpg")}>
 
             <View style={styles.logoContainer}>
                 <LottieView style={styles.lottieAnim}
-                    source={require("../assets/shopping.json")} autoPlay loop />
+                    source={require("../assets/lottie/shopping.json")} autoPlay loop />
             </View>
 
             <View style={styles.loginBtn}>
