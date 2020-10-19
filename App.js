@@ -9,7 +9,7 @@ export default function App() {
   return (
     <View style={{ flex: 1 }}>
       <HomeScreen />
-      {/* <Navbar style={{ zIndex: 20 }}></Navbar> */}
+      <Navbar style={{ zIndex: 20 }}></Navbar>
     </View>
   );
 

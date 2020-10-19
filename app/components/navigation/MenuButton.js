@@ -121,10 +121,14 @@ const styles = StyleSheet.create({
         borderRadius: 36,
         position: 'absolute',
         top: -60,
-        shadowColor: '#1e33fc',
-        shadowRadius: 5,
-        shadowOffset: { height: 10 },
-        shadowOpacity: 0.3,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.30,
+        shadowRadius: 4.70,
+        elevation: 5,
         borderWidth: 3,
         borderColor: '#fff'
     },
@@ -135,7 +139,17 @@ const styles = StyleSheet.create({
         width: 48,
         height: 48,
         borderRadius: 24,
-        backgroundColor: '#1e33fc'
+        backgroundColor: '#1e33fc',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.30,
+        shadowRadius: 4.70,
+        elevation: 5,
+        borderWidth: 3,
+        borderColor: '#fff'
 
     }
 })
