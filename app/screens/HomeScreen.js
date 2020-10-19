@@ -36,7 +36,34 @@ function HomeScreen(props) {
             category: "Moncler",
             price: "€125"
         }
-    ])
+    ]);
+
+    const [moreproducts, setMoreProducts] = React.useState([
+        {
+            id: 0,
+            name: "Parka Jacket",
+            image: prodImage1,
+            background: "#c20902",
+            category: "Canada Goose",
+            price: "€625"
+        },
+        {
+            id: 1,
+            name: "Crewneck",
+            image: prodImage2,
+            background: "#ed6e13",
+            category: "Stone Island",
+            price: "€255"
+        },
+        {
+            id: 2,
+            name: "Polo",
+            image: prodImage3,
+            background: "#0f44b8",
+            category: "Moncler",
+            price: "€125"
+        }
+    ]);
 
     //Loading fonts
     let [fontsLoaded, error] = useFonts({
@@ -108,6 +135,38 @@ function HomeScreen(props) {
         )
     }
 
+    //Render More Products
+    function moreProducts(item, index) {
+        return (
+            <TouchableOpacity
+                onPress={() => {
+                    console.log("moreProducts")
+                }}>
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    marginBottom: 10,
+                    padding: 12,
+                }}>
+                    <View style={styles.moreProdCard}>
+                        <Image
+                            source={item.image}
+                            resizeMode="contain"
+                            style={styles.moreProdImage} />
+                    </View>
+                    <View style={styles.moreProdInfo}>
+                        <Text style={styles.moreProdName}>
+                            {item.name}
+                        </Text>
+                        <Text style={styles.moreProdPrice}>
+                            {item.price}
+                        </Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
     return (
         <View style={styles.container}>
             <Text style={styles.products}>PRODUCTS</Text>
@@ -123,6 +182,43 @@ function HomeScreen(props) {
                     renderItem={({ item, index }) => renderFeatured(item, index)}
                 />
             </View>
+
+            {/* More Products */}
+            <View style={[{
+                backgroundColor: 'white',
+                flex: 1,
+                flexDirection: 'row',
+                marginTop: 30,
+                borderTopRightRadius: 30,
+                borderTopLeftRadius: 30,
+            }, styles.moreProdShadow]}>
+
+                <View
+                    styles={{
+                        width: 70,
+                        padding: 40,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+
+                    <Image
+                        source={require('../assets/images/products.png')}
+                        resizeMode="cover"
+                        style={{ flex: 1, width: 80, backgroundColor: '#fff' }}></Image>
+
+                </View>
+
+                <View style={styles.moreProducts}>
+                    <FlatList
+                        showsVerticalScrollIndicator={false}
+                        data={moreproducts}
+                        keyExtractor={item => item.id.toString()}
+                        renderItem={({ item, index }) => moreProducts(item, index)}
+                    />
+
+                </View>
+
+            </View>
         </View>
 
     );
@@ -134,14 +230,14 @@ const styles = StyleSheet.create({
     },
     products: {
         textAlign: 'center',
-        marginTop: 50,
+        marginTop: 40,
         fontSize: 35,
         color: '#e3e3e3',
         padding: 14,
         fontFamily: "Montserrat_700Bold",
     },
     featured: {
-        marginTop: 50,
+        marginTop: 30,
         fontSize: 20,
         padding: 14,
         paddingLeft: 23,
@@ -194,6 +290,46 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.30,
         shadowRadius: 4.70,
         elevation: 10
+    },
+    moreProducts: {
+        flex: 1,
+    },
+    productrow: {
+        flex: 1,
+        flexDirection: 'row',
+        marginBottom: 10,
+        padding: 12,
+    },
+    moreProdCard: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    moreProdImage: {
+        width: 100,
+        height: 100
+    },
+    moreProdInfo: {
+        flex: 1.5,
+        marginLeft: 15,
+        justifyContent: 'center',
+
+    },
+    moreProdName: {
+        color: '#c4c4c4',
+        fontSize: 16
+    },
+    moreProdPrice: {
+        color: '#000',
+        fontFamily: "Montserrat_400Regular",
+        fontSize: 18
+    },
+    moreProdShadow: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.8,
+        shadowRadius: 10,
+        elevation: 15
     }
 
 })

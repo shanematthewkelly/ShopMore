@@ -8,8 +8,8 @@ import Navbar from './app/components/navigation/Navbar'
 export default function App() {
   return (
     <View style={{ flex: 1 }}>
+      {/* <Navbar /> */}
       <HomeScreen />
-      <Navbar style={{ zIndex: 20 }}></Navbar>
     </View>
   );
 
