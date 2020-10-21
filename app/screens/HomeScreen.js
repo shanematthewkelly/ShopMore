@@ -1,11 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, StyleSheet, Text, Image, Modal } from 'react-native';
 import { useFonts, Montserrat_700Bold, Montserrat_400Regular } from '@expo-google-fonts/montserrat';
 import { AppLoading } from 'expo';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { prodImage1, prodImage2, prodImage3 } from '../global/prodImage'
 import Svg, { Polygon } from 'react-native-svg';
-
 
 
 function HomeScreen(props) {
@@ -65,6 +64,10 @@ function HomeScreen(props) {
         }
     ]);
 
+    //Popup for products
+    const [productPopup, setProductPopup] = React.useState(false)
+    const [productClicked, setProductClicked] = React.useState(null)
+
     //Loading fonts
     let [fontsLoaded, error] = useFonts({
         Montserrat_700Bold,
@@ -94,7 +97,12 @@ function HomeScreen(props) {
                 justifyContent: 'center',
                 marginHorizontal: 10,
                 ...featuredStyling
-            }}>
+            }}
+                onPress={() => {
+                    setProductClicked(item)
+                    setProductPopup(true)
+                }}>
+
                 <Text style={styles.flatlistTitle}>{item.category}</Text>
 
                 <View style={[{
@@ -140,7 +148,8 @@ function HomeScreen(props) {
         return (
             <TouchableOpacity
                 onPress={() => {
-                    console.log("moreProducts")
+                    setProductClicked(item)
+                    setProductPopup(true)
                 }}>
                 <View style={{
                     flex: 1,
@@ -213,13 +222,64 @@ function HomeScreen(props) {
                         showsVerticalScrollIndicator={false}
                         data={moreproducts}
                         keyExtractor={item => item.id.toString()}
-                        renderItem={({ item, index }) => moreProducts(item, index)}
-                    />
-
+                        renderItem={({ item, index }) => moreProducts(item, index)} />
                 </View>
-
             </View>
+
+            {/* Popup */}
+
+            {productClicked &&
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={productPopup}>
+
+                    <View style={styles.blurred}>
+
+                        {/* Popup Close */}
+                        <TouchableOpacity style={styles.popupClose}
+                            onPress={() => {
+                                // Fix this error
+                                setProductClicked(null)
+                                setProductPopup(false)
+                            }}>
+                        </TouchableOpacity>
+
+                        {/* Modal Details */}
+                        <View style={{
+                            justifyContent: 'center',
+                            width: '85%',
+                            backgroundColor: productClicked.background
+                        }}>
+                            <View style={styles.imageContainerModal}>
+                                <Image
+                                    source={productClicked.image}
+                                    resizeMode="contain"
+                                    style={{
+                                        width: '100%',
+                                        height: 260
+                                    }} />
+                            </View>
+                            <Text style={styles.modalName}>{productClicked.name}</Text>
+                            <Text style={styles.modalCategory}>{productClicked.category}</Text>
+                            <Text style={styles.modalPrice}>{productClicked.price}</Text>
+
+                            <TouchableOpacity style={styles.modalBuyButton}
+                                onPress={() => {
+                                    // Fix this error
+                                    setProductClicked(null)
+                                    setProductPopup(false)
+                                }}>
+                                <Text style={styles.addToCart}>Add To Cart</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                    </View>
+
+                </Modal>
+            }
         </View>
+
 
     );
 }
@@ -330,6 +390,62 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.8,
         shadowRadius: 10,
         elevation: 15
+    },
+    blurred: {
+        flex: 1,
+        backgroundColor: 'rgba(255, 255, 255, 0.75)',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    popupClose: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0
+    },
+    modalName: {
+        color: '#fff',
+        paddingTop: 12,
+        paddingLeft: 30,
+        paddingRight: 30,
+        fontSize: 25,
+        fontFamily: "Montserrat_700Bold",
+
+    },
+    modalCategory: {
+        color: '#fff',
+        paddingLeft: 32,
+        paddingRight: 30,
+        fontSize: 12,
+        textTransform: 'uppercase'
+    },
+    modalPrice: {
+        color: '#fff',
+        paddingTop: 12,
+        paddingLeft: 35,
+        paddingRight: 30,
+        fontSize: 23,
+        fontFamily: "Montserrat_400Regular",
+    },
+    modalBuyButton: {
+        width: '100%',
+        height: 70,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 20,
+        backgroundColor: 'rgba(0,0,0,0.5)'
+    },
+    addToCart: {
+        color: '#fff',
+        fontFamily: "Montserrat_400Regular",
+        fontSize: 18,
+        textTransform: 'uppercase'
+    },
+    imageContainerModal: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: -120
     }
 
 })
