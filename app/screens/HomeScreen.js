@@ -1,13 +1,17 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image, Modal } from 'react-native';
+import { View, StyleSheet, Text, Image, Modal, TouchableOpacity } from 'react-native';
 import { useFonts, Montserrat_700Bold, Montserrat_400Regular } from '@expo-google-fonts/montserrat';
 import { AppLoading } from 'expo';
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import { prodImage1, prodImage2, prodImage3 } from '../global/prodImage'
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { prodImage1, prodImage2, prodImage3, gucciCap, louisVuitton, monclerGillet } from '../global/prodImage'
 import Svg, { Polygon } from 'react-native-svg';
 
 
 function HomeScreen(props) {
+
+    //Modal for products
+    const [showModal, setShowModal] = React.useState(false)
+    const [productClicked, setProductClicked] = React.useState(null)
 
     //Dummy Data
     const [featured, setFeatured] = React.useState([
@@ -40,33 +44,32 @@ function HomeScreen(props) {
     const [moreproducts, setMoreProducts] = React.useState([
         {
             id: 0,
-            name: "Parka Jacket",
-            image: prodImage1,
-            background: "#c20902",
-            category: "Canada Goose",
-            price: "€625"
+            name: "Snake-Print Cap",
+            description: "This is a random description, it must be changed for the user to understand",
+            image: gucciCap,
+            background: "#3b3b3b",
+            category: "Gucci",
+            price: "€250"
         },
         {
             id: 1,
-            name: "Crewneck",
-            image: prodImage2,
-            background: "#ed6e13",
-            category: "Stone Island",
-            price: "€255"
+            name: "LV Handbag",
+            description: "This is a random description, it must be changed for the user to understand",
+            image: louisVuitton,
+            background: "#D2B48C",
+            category: "Louis Vuitton",
+            price: "€1299"
         },
         {
             id: 2,
-            name: "Polo",
-            image: prodImage3,
-            background: "#0f44b8",
+            name: "Moncler Gillet",
+            description: "This is a random description, it must be changed for the user to understand",
+            image: monclerGillet,
+            background: "#089930",
             category: "Moncler",
-            price: "€125"
+            price: "€625"
         }
     ]);
-
-    //Popup for products
-    const [productPopup, setProductPopup] = React.useState(false)
-    const [productClicked, setProductClicked] = React.useState(null)
 
     //Loading fonts
     let [fontsLoaded, error] = useFonts({
@@ -89,18 +92,18 @@ function HomeScreen(props) {
         }
 
         return (
-            <TouchableOpacity style={{
-                paddingBottom: 22,
-                height: 262,
-                width: 184,
-                paddingLeft: 12,
-                justifyContent: 'center',
-                marginHorizontal: 10,
-                ...featuredStyling
+            <TouchableOpacity onPress={() => {
+                setProductClicked(item)
+                setShowModal(true)
             }}
-                onPress={() => {
-                    setProductClicked(item)
-                    setProductPopup(true)
+                style={{
+                    paddingBottom: 22,
+                    height: 262,
+                    width: 184,
+                    paddingLeft: 12,
+                    justifyContent: 'center',
+                    marginHorizontal: 10,
+                    ...featuredStyling
                 }}>
 
                 <Text style={styles.flatlistTitle}>{item.category}</Text>
@@ -146,38 +149,31 @@ function HomeScreen(props) {
     //Render More Products
     function moreProducts(item, index) {
         return (
-            <TouchableOpacity
-                onPress={() => {
-                    setProductClicked(item)
-                    setProductPopup(true)
-                }}>
-                <View style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    marginBottom: 10,
-                    padding: 12,
-                }}>
-                    <View style={styles.moreProdCard}>
+            <View
+                style={{ alignItems: 'center' }}>
+                <TouchableOpacity style={styles.card}
+                    onPress={() => {
+                        setProductClicked(item)
+                        setShowModal(true)
+                    }}>
+                    <View style={styles.imageWrapper}>
                         <Image
                             source={item.image}
-                            resizeMode="contain"
-                            style={styles.moreProdImage} />
+                            style={styles.cardImage}
+                            resizeMode="contain" />
                     </View>
-                    <View style={styles.moreProdInfo}>
-                        <Text style={styles.moreProdName}>
-                            {item.name}
-                        </Text>
-                        <Text style={styles.moreProdPrice}>
-                            {item.price}
-                        </Text>
+                    <View style={styles.cardTextWrapper}>
+                        <Text style={styles.cardTitle}>{item.name}</Text>
+                        <Text style={styles.cardDesc}>{item.description}</Text>
+                        <Text style={styles.cardPrice}>{item.price}</Text>
                     </View>
-                </View>
-            </TouchableOpacity>
+                </TouchableOpacity>
+            </View>
         )
     }
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <Text style={styles.products}>PRODUCTS</Text>
             <Text style={styles.featured}>FEATURED</Text>
 
@@ -193,29 +189,18 @@ function HomeScreen(props) {
             </View>
 
             {/* More Products */}
-            <View style={[{
+            <View>
+                <Text style={styles.bestSelling}>BEST-SELLING</Text>
+            </View>
+
+            <View style={{
                 backgroundColor: 'white',
                 flex: 1,
                 flexDirection: 'row',
                 marginTop: 30,
                 borderTopRightRadius: 30,
                 borderTopLeftRadius: 30,
-            }, styles.moreProdShadow]}>
-
-                <View
-                    styles={{
-                        width: 70,
-                        padding: 40,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}>
-
-                    <Image
-                        source={require('../assets/images/products.png')}
-                        resizeMode="cover"
-                        style={{ flex: 1, width: 80, backgroundColor: '#fff' }}></Image>
-
-                </View>
+            }}>
 
                 <View style={styles.moreProducts}>
                     <FlatList
@@ -232,16 +217,16 @@ function HomeScreen(props) {
                 <Modal
                     animationType="slide"
                     transparent={true}
-                    visible={productPopup}>
+                    visible={showModal}
+                >
 
                     <View style={styles.blurred}>
 
                         {/* Popup Close */}
                         <TouchableOpacity style={styles.popupClose}
                             onPress={() => {
-                                // Fix this error
                                 setProductClicked(null)
-                                setProductPopup(false)
+                                setShowModal(false)
                             }}>
                         </TouchableOpacity>
 
@@ -266,9 +251,9 @@ function HomeScreen(props) {
 
                             <TouchableOpacity style={styles.modalBuyButton}
                                 onPress={() => {
-                                    // Fix this error
                                     setProductClicked(null)
-                                    setProductPopup(false)
+                                    setShowModal(false)
+                                    alert("Product Added To Cart")
                                 }}>
                                 <Text style={styles.addToCart}>Add To Cart</Text>
                             </TouchableOpacity>
@@ -278,7 +263,7 @@ function HomeScreen(props) {
 
                 </Modal>
             }
-        </View>
+        </ScrollView>
 
 
     );
@@ -301,6 +286,12 @@ const styles = StyleSheet.create({
         fontSize: 20,
         padding: 14,
         paddingLeft: 23,
+        fontFamily: "Montserrat_700Bold",
+    },
+    bestSelling: {
+        marginTop: 50,
+        fontSize: 20,
+        paddingLeft: 33,
         fontFamily: "Montserrat_700Bold",
     },
     flatlist: {
@@ -331,7 +322,7 @@ const styles = StyleSheet.create({
         right: 35,
         width: "58%",
         height: "55%",
-        elevation: 22
+        elevation: 10
     },
     shape: {
         position: 'absolute',
@@ -339,7 +330,7 @@ const styles = StyleSheet.create({
         right: 0,
         width: '100%',
         height: '100%',
-        elevation: 20
+        elevation: 10
     },
     cardShadow: {
         shadowColor: '#000',
@@ -383,13 +374,6 @@ const styles = StyleSheet.create({
         color: '#000',
         fontFamily: "Montserrat_400Regular",
         fontSize: 18
-    },
-    moreProdShadow: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.8,
-        shadowRadius: 10,
-        elevation: 15
     },
     blurred: {
         flex: 1,
@@ -446,6 +430,63 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: -120
+    },
+    card: {
+        marginBottom: 15,
+        backgroundColor: '#fff',
+        paddingVertical: 18,
+        paddingHorizontal: 5,
+        width: '92%',
+        borderRadius: 20,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.30,
+        shadowRadius: 4.70,
+        elevation: 3,
+        flexDirection: 'row',
+    },
+    cardTitle: {
+        fontFamily: "Montserrat_400Regular",
+        fontSize: 20,
+    },
+    cardDesc: {
+        fontSize: 15,
+        color: '#b0b0b0'
+    },
+    cardPrice: {
+        marginTop: 12,
+        fontSize: 18,
+        fontFamily: "Montserrat_400Regular",
+    },
+    imageWrapper: {
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    cardImage: {
+        width: 120,
+        height: 150
+    },
+    cardTextWrapper: {
+        marginHorizontal: 12,
+        overflow: 'hidden',
+        flex: 1.5
+    },
+    closeButton: {
+        width: 300,
+        height: 65,
+        backgroundColor: '#d12e64',
+        borderRadius: 80,
+        justifyContent: 'center',
+        zIndex: 80
+    },
+    closeText: {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 16,
+        fontWeight: 'bold'
     }
 
 })
